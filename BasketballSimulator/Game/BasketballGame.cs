@@ -1,41 +1,55 @@
 ﻿/// <summary>
-/// Simulates a basketball game with realistic NBA pace, turnovers, and scoring.
+/// Simulates an NBA-style basketball game with pace, turnovers, and scoring.
 /// </summary>
 public class BasketballGame
 {
-    private const int GameDurationSeconds = 48 * 60;
-    private const int QuarterDurationSeconds = 12 * 60;
-    private readonly List<Player> _teamA = new();
-    private readonly List<Player> _teamB = new();
+    private static readonly TimeSpan GameDuration = TimeSpan.FromMinutes(48);
+    private static readonly TimeSpan QuarterDuration = TimeSpan.FromMinutes(12);
+    private const double AvgPossessionSeconds = 15.0;
+
+    private readonly List<Player> _teamA;
+    private readonly List<Player> _teamB;
+    private readonly StatsManager _statsManager;
+    private readonly Random _random;
     private int _scoreA;
     private int _scoreB;
-    private readonly Random _random = new();
-    private PlayerStatsTracker _statsTracker;
 
-    // Expose final scores
+    /// <summary>
+    /// Gets the current score of Team A.
+    /// </summary>
     public int ScoreA => _scoreA;
+
+    /// <summary>
+    /// Gets the current score of Team B.
+    /// </summary>
     public int ScoreB => _scoreB;
 
-    // League average possession time (~15s)
-    private readonly double _avgPossessionTime = 15.0;
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BasketballGame"/> class.
+    /// </summary>
     public BasketballGame()
     {
-        _statsTracker = new PlayerStatsTracker();
+        _teamA = new List<Player>();
+        _teamB = new List<Player>();
+        _random = new Random();
+        _statsManager = new StatsManager();
     }
 
     private string FormatTime(int totalSeconds) => $"{totalSeconds / 60:D2}:{totalSeconds % 60:D2}";
 
+    /// <summary>
+    /// Populates both teams with five players each using Gaussian generation.
+    /// </summary>
     public void SetupTeams()
     {
-        Position[] positions = new[]
+        Position[] positions =
         {
-        Position.PointGuard,
-        Position.ShootingGuard,
-        Position.SmallForward,
-        Position.PowerForward,
-        Position.Center
-    };
+                Position.PointGuard,
+                Position.ShootingGuard,
+                Position.SmallForward,
+                Position.PowerForward,
+                Position.Center
+            };
 
         foreach (var pos in positions)
         {
@@ -45,15 +59,22 @@ public class BasketballGame
     }
 
     /// <summary>
-    /// Resets scores and player stats but keeps the same teams.
+    /// Resets scores and player stats but retains rosters.
     /// </summary>
     public void ResetForSimulation()
     {
         _scoreA = 0;
         _scoreB = 0;
-        _statsTracker.InitializeStats(_teamA, _teamB);
+        _statsManager.InitializeStats(new Dictionary<string, List<Player>>
+            {
+                { "Team A", _teamA },
+                { "Team B", _teamB }
+            });
     }
 
+    /// <summary>
+    /// Displays rosters with detailed attributes and prints predicted score.
+    /// </summary>
     public void DisplayTeams()
     {
         Console.WriteLine("Team rosters:");
@@ -84,16 +105,15 @@ public class BasketballGame
         for (int i = 0; i < team.Count; i++)
         {
             var p = team[i];
-            // Format height as right-aligned within 5 spaces (e.g., "190cm")
             string ht = p.Height.ToString() + "cm";
             ht = ht.PadLeft(5);
 
             Console.WriteLine(string.Format(
                 "{0,3} {1,-3} {2,-3} {3,-2} {4,5} {5,4} {6,4} {7,4} {8,4} {9,4} {10,4} {11,4} {12,4} {13,4} {14,4} {15,4} {16,4} {17,4} {18,4} {19,4} {20,4}",
                 i + 1,
-                GetPosAbbrev(p.Position),
-                GetHybAbbrev(p.HybridPosition),
-                GetRoleAbbrev(p.PlayerRole),
+                BasketballUtils.GetPosAbbrev(p.Position),
+                BasketballUtils.GetHybAbbrev(p.HybridPosition),
+                BasketballUtils.GetRoleAbbrev(p.PlayerRole),
                 ht,
                 p.Overall,
                 p.Potential,
@@ -114,80 +134,47 @@ public class BasketballGame
         }
     }
 
-    private string GetPosAbbrev(Position pos) => pos switch
-    {
-        Position.PointGuard => "PG",
-        Position.ShootingGuard => "SG",
-        Position.SmallForward => "SF",
-        Position.PowerForward => "PF",
-        Position.Center => "C",
-        _ => pos.ToString().Substring(0, 2).ToUpper()
-    };
-
-    private string GetHybAbbrev(HybridPosition hyb) => hyb switch
-    {
-        HybridPosition.None => "-",
-        HybridPosition.ComboGuard => "CG",
-        HybridPosition.Wing => "WG",
-        HybridPosition.ForwardSwing => "FS",
-        HybridPosition.BigManSwing => "BS",
-        _ => "-"
-    };
-
-    private string GetRoleAbbrev(PlayerRole role) => role switch
-    {
-        PlayerRole.Superstar => "SS",
-        PlayerRole.AllStar => "AS",
-        PlayerRole.Starter => "ST",
-        PlayerRole.RolePlayer => "RP",
-        PlayerRole.Rotation => "RT",
-        PlayerRole.BenchWarmer => "BW",
-        PlayerRole.Prospect => "PR",
-        _ => role.ToString().Substring(0, 2).ToUpper()
-    };
-
     private (double overall, double three, double mid, double inside) ComputeAverages(List<Player> team) =>
         (team.Average(p => p.Overall), team.Average(p => p.ThreePointers), team.Average(p => p.MidRange), team.Average(p => p.Inside));
 
     private (int predA, int predB) PredictScore(double avgA, double avgB)
     {
-        double diff = avgA - avgB;
-        int baseScore = 110;
-        int margin = (int)Math.Round(diff * 1.5);
+        const int baseScore = 110;
+        int margin = (int)Math.Round((avgA - avgB) * 1.5);
         return (baseScore + margin, baseScore - margin);
     }
 
+    /// <summary>
+    /// Simulates the game flow including turnovers, steals, fouls, shots, and rebounds.
+    /// </summary>
+    /// <param name="verbose">Whether to log play-by-play to console.</param>
     public void Simulate(bool verbose = true)
     {
         int elapsed = 0, quarter = 1;
-        int nextQuarter = QuarterDurationSeconds;
+        int nextQuarter = (int)QuarterDuration.TotalSeconds;
 
-        while (elapsed < GameDurationSeconds)
+        while (elapsed < (int)GameDuration.TotalSeconds)
         {
             bool isA = ((elapsed / 24) % 2) == 0;
             var offense = isA ? _teamA : _teamB;
             var defense = isA ? _teamB : _teamA;
-            var teamName = isA ? "Team A" : "Team B";
+            string teamName = isA ? "Team A" : "Team B";
 
             int shooterIdx = GetWeightedRandomIndex(offense);
             var shooter = offense[shooterIdx];
-            // Defender must be within one position difference from shooter
-            var defenderCandidates = defense
-                .Where(d => Math.Abs((int)d.Position - (int)shooter.Position) <= 1)
-                .ToList();
-            if (!defenderCandidates.Any())
-                defenderCandidates = defense;
+            var defenderCandidates = defense.Where(d => Math.Abs((int)d.Position - (int)shooter.Position) <= 1).ToList();
+            if (!defenderCandidates.Any()) defenderCandidates = defense;
             var defender = defenderCandidates[_random.Next(defenderCandidates.Count)];
 
-            int possessionTime = Math.Clamp((int)Math.Round(_random.NextGaussian(_avgPossessionTime, 4)), 6, 24);
+            int possessionTime = Math.Clamp((int)Math.Round(_random.NextGaussian(AvgPossessionSeconds, 4)), 6, 24);
             elapsed += possessionTime;
             if (elapsed >= nextQuarter)
             {
                 quarter++;
-                nextQuarter += QuarterDurationSeconds;
+                nextQuarter += (int)QuarterDuration.TotalSeconds;
                 if (verbose) Console.WriteLine($"\n--- Start of Quarter {quarter} ---\n");
             }
-            if (elapsed >= GameDurationSeconds) break;
+            if (elapsed >= (int)GameDuration.TotalSeconds) break;
 
             ProcessPossession(isA, shooterIdx, shooter, defender, teamName, elapsed, verbose);
         }
@@ -195,12 +182,14 @@ public class BasketballGame
 
     private void ProcessPossession(bool isTeamA, int idx, Player shooter, Player defender, string team, int time, bool verbose)
     {
+        var action = ChooseAction(shooter);
+
         // Turnover (~14% league avg) modified by player overall
         double baseTO = 0.14;
         double toChance = Math.Clamp(baseTO + (50 - shooter.Overall) / 1000.0, 0.05, 0.25);
         if (_random.NextDouble() < toChance)
         {
-            _statsTracker.AddTurnover(shooter);
+            _statsManager.AddTurnover(shooter);
             if (verbose) Console.WriteLine($"[{FormatTime(time)}] {team} - Player {idx + 1} turnover!");
             return;
         }
@@ -211,12 +200,10 @@ public class BasketballGame
         double stealChance = Math.Clamp(stealBase + stealMod, 0.005, 0.10);
         if (_random.NextDouble() < stealChance)
         {
-            _statsTracker.AddSteal(defender);
+            _statsManager.AddSteal(defender);
             if (verbose) Console.WriteLine($"[{FormatTime(time)}] {team} - Player {idx + 1} loses the ball, steal by defender!");
             return;
         }
-
-        var action = ChooseAction(shooter);
 
         // Fouled on shot (~14% league avg)
         double foulRate = 0.14;
@@ -232,7 +219,7 @@ public class BasketballGame
             double blockChance = Math.Clamp((defender.DefensiveIQ + defender.Speed) / 2000.0, 0.02, 0.12);
             if (_random.NextDouble() < blockChance)
             {
-                _statsTracker.AddBlock(defender);
+                _statsManager.AddBlock(defender);
                 if (verbose) Console.WriteLine($"[{FormatTime(time)}] {team} - Player {idx + 1} shot blocked by defender!");
                 return;
             }
@@ -265,12 +252,6 @@ public class BasketballGame
                 midWeight *= 1.05;
                 threeWeight *= 1.15;
                 break;
-            case Position.SmallForward:
-                // pretty balanced
-                insideWeight *= 1.0;
-                midWeight *= 1.0;
-                threeWeight *= 1.0;
-                break;
             case Position.PowerForward:
                 insideWeight *= 1.1;
                 midWeight *= 0.9;
@@ -298,12 +279,9 @@ public class BasketballGame
         // 5) Roll to choose
         double total = insideWeight + midWeight + threeWeight;
         double roll = _random.NextDouble() * total;
-        if (roll < insideWeight)
-            return ActionType.Inside;
-        else if (roll < insideWeight + midWeight)
-            return ActionType.MidRange;
-        else
-            return ActionType.ThreePoint;
+        if (roll < insideWeight) return ActionType.Inside;
+        if (roll < insideWeight + midWeight) return ActionType.MidRange;
+        return ActionType.ThreePoint;
     }
 
     private double CalculateSuccessChance(Player shooter, Player defender, ActionType action)
@@ -315,12 +293,14 @@ public class BasketballGame
             ActionType.MidRange => shooter.MidRange,
             _ => shooter.Inside
         } / 100.0;
+
         // Defense reduction
         double defenseMod = (defender.DefensiveIQ + defender.Speed) / 5000.0;
         double raw = shooterStat - defenseMod;
+
         // Clamp to realistic NBA ranges
-        double min = action switch { ActionType.ThreePoint => 0.28, ActionType.MidRange => 0.33, _ => 0.45 };
-        double max = action switch { ActionType.ThreePoint => 0.42, ActionType.MidRange => 0.50, _ => 0.65 };
+        double min = action switch { ActionType.ThreePoint => 0.30, ActionType.MidRange => 0.35, _ => 0.50 };
+        double max = action switch { ActionType.ThreePoint => 0.46, ActionType.MidRange => 0.55, _ => 0.70 };
         return Math.Clamp(raw, min, max);
     }
 
@@ -338,8 +318,12 @@ public class BasketballGame
         for (int i = 0; i < shots; i++)
         {
             bool success = _random.NextDouble() < ftChance;
-            _statsTracker.AddFreeThrow(shooter, success);
-            if (success) made++;
+            _statsManager.AddFreeThrow(shooter, success);
+            if (success)
+            {
+                made++;
+                _statsManager.AddPoints(shooter, 1);
+            }
         }
         if (isA) _scoreA += made; else _scoreB += made;
         if (verbose) Console.WriteLine($"[{FormatTime(time)}] {team} - Player {idx + 1} fouled on shot. Free throws: {made}/{shots}");
@@ -347,21 +331,50 @@ public class BasketballGame
 
     private void ExecuteMadeShot(bool isA, int idx, Player shooter, string team, int time, ActionType action, bool verbose)
     {
+        // Determine points based on shot type
         int pts = action == ActionType.ThreePoint ? 3 : 2;
-        if (isA) _scoreA += pts; else _scoreB += pts;
-        _statsTracker.AddPoints(shooter, pts);
-        _statsTracker.AddFieldGoal(shooter, true, action == ActionType.ThreePoint);
 
-        int aIdx;
-        do { aIdx = _random.Next(0, 5); } while (aIdx == idx);
-        _statsTracker.AddAssist((isA ? _teamA : _teamB)[aIdx]);
-        if (verbose) Console.WriteLine($"[{FormatTime(time)}] {team} - Player {idx + 1} scores {pts}! Assist: Player {aIdx + 1}");
+        // Update the team score
+        if (isA) _scoreA += pts;
+        else _scoreB += pts;
+
+        // Update individual player stats
+        _statsManager.AddPoints(shooter, pts);
+        _statsManager.AddFieldGoal(shooter, true, action == ActionType.ThreePoint);
+
+        // Set the chance of an assist based on shot type
+        double assistChance = action switch
+        {
+            ActionType.ThreePoint => 0.85,  // High likelihood for assisted 3PT shots
+            ActionType.MidRange => 0.40,  // Lower for mid-range (often isolation)
+            ActionType.Inside => 0.60,  // Moderate for paint shots (cuts, PnR)
+            _ => 0.50                       // Default fallback
+        };
+
+        // Determine if an assist occurred based on probability
+        bool hasAssist = _random.NextDouble() < assistChance;
+
+        int aIdx = -1;
+        if (hasAssist)
+        {
+            // Select a random teammate (excluding the shooter) to credit the assist
+            do { aIdx = _random.Next(0, 5); } while (aIdx == idx);
+            _statsManager.AddAssist((isA ? _teamA : _teamB)[aIdx]);
+        }
+
+        // Optionally log the result to console
+        if (verbose)
+        {
+            string assistInfo = hasAssist ? $" Assist: Player {aIdx + 1}" : "";
+            Console.WriteLine($"[{FormatTime(time)}] {team} - Player {idx + 1} scores {pts}!{assistInfo}");
+        }
     }
+
 
     private void ExecuteMissedShot(bool isA, int idx, Player shooter, Player defender, string team, int time, ActionType action, bool verbose)
     {
         // Register missed field goal (assuming two-point miss)
-        _statsTracker.AddFieldGoal(shooter, false, action == ActionType.ThreePoint);
+        _statsManager.AddFieldGoal(shooter, false, action == ActionType.ThreePoint);
 
         // 1) Attempt offensive rebound
         double posBonusOff = shooter.Position switch
@@ -376,7 +389,7 @@ public class BasketballGame
         if (_random.NextDouble() < offRebRate)
         {
             // Offensive rebound by shooter
-            _statsTracker.AddRebound(shooter, true);
+            _statsManager.AddRebound(shooter, true);
             if (verbose) Console.WriteLine($"[{FormatTime(time)}] {team} - Player {idx + 1} misses but gets the offensive rebound!");
             return;
         }
@@ -399,7 +412,7 @@ public class BasketballGame
             rebounder = defender;
         }
 
-        _statsTracker.AddRebound(rebounder, false);
+        _statsManager.AddRebound(rebounder, false);
         if (verbose)
         {
             if (rebounder == defender)
@@ -433,6 +446,6 @@ public class BasketballGame
     {
         Console.WriteLine("\nEnd of game!");
         Console.WriteLine($"Final Score: Team A {_scoreA} - Team B {_scoreB}");
-        _statsTracker.DisplayAll("Team A", _teamA, "Team B", _teamB);
+        _statsManager.DisplayAllStats();
     }
 }
