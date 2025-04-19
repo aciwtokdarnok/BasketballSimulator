@@ -6,7 +6,7 @@ public class StatsManager
     private readonly Dictionary<string, Dictionary<Player, PlayerStats>> _teamStats;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="BasketballStatsManager"/> class.
+    /// Initializes a new instance of the <see cref="StatsManager"/> class.
     /// </summary>
     public StatsManager()
     {
