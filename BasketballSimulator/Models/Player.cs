@@ -1,48 +1,58 @@
-﻿public class Player
+﻿/// <summary>
+/// Represents a basketball player with core ratings and metadata.
+/// Overall and Potential are computed on-the-fly.
+/// </summary>
+public class Player
 {
-    private const int MinHeight = 170;
-    private const int MaxHeight = 220;
+    // Raw data
+    public byte Height { get; init; }
+    public required RatingPresets Ratings { get; init; }
+    public Archetype Archetype { get; init; }
+    public Position Position { get; init; }
+    public byte Age { get; init; }
 
-    public int Height, Strength, Speed, Jumping, Endurance;
-    public int Inside, DunksLayups, FreeThrows, MidRange, ThreePointers;
-    public int OffensiveIQ, DefensiveIQ, Dribbling, Passing, Rebounding;
-    public double Overall, Potential;
+    public byte Strength => Ratings.Strength;
+    public byte Speed => Ratings.Speed;
+    public byte Jumping => Ratings.Jumping;
+    public byte Endurance => Ratings.Endurance;
+    public byte Inside => Ratings.Inside;
+    public byte DunksLayups => Ratings.DunksLayups;
+    public byte FreeThrows => Ratings.FreeThrows;
+    public byte MidRange => Ratings.MidRange;
+    public byte ThreePointers => Ratings.ThreePointers;
+    public byte OffensiveIQ => Ratings.OffensiveIQ;
+    public byte DefensiveIQ => Ratings.DefensiveIQ;
+    public byte Dribbling => Ratings.Dribbling;
+    public byte Passing => Ratings.Passing;
+    public byte Rebounding => Ratings.Rebounding;
 
-    public Position Position;
-    public HybridPosition HybridPosition;
-    public PlayerRole PlayerRole;
+    /// <summary>
+    /// Overall rating, computed as a weighted regression + fudge factor.
+    /// Always up-to-date with Height and Ratings.
+    /// </summary>
+    public byte Overall => RatingCalculator.ComputeOverall(Height, Ratings);
 
-    public void CalculateOverall()
+    /// <summary>
+    /// Estimated potential, computed from Overall and Age.
+    /// Always up-to-date if Overall or Age change.
+    /// </summary>
+    public byte Potential => RatingCalculator.ComputePotential(Overall, Age);
+
+    /// <summary>
+    /// Factory: create a new Player from raw inputs.
+    /// </summary>
+    public static Player Create(
+        byte height,
+        RatingPresets ratings,
+        Archetype archetype,
+        Position position,
+        byte age
+    ) => new Player
     {
-        // Normalize height to 1–99 based on expected range
-        double heightRating = Math.Clamp((Height - MinHeight) * (99.0 / (MaxHeight - MinHeight)), 1, 99);
-
-        // Sum of height plus the 15 skill attributes
-        double sum = heightRating + Strength + Speed + Jumping + Endurance
-                     + Inside + DunksLayups + FreeThrows + MidRange + ThreePointers
-                     + OffensiveIQ + DefensiveIQ + Dribbling + Passing + Rebounding;
-
-        // True average over 16 values (height + 15 skills)
-        Overall = Math.Round(sum / 16.0);
-    }
-
-    public void CalculatePotential()
-    {
-        // Use same normalized height for physical potential
-        double heightRating = Math.Clamp((Height - MinHeight) * (99.0 / (MaxHeight - MinHeight)), 1, 99);
-
-        // Averages for each category
-        double physAvg = (heightRating + Strength + Speed + Jumping + Endurance) / 5.0;
-        double shootAvg = (Inside + DunksLayups + FreeThrows + MidRange + ThreePointers) / 5.0;
-        double skillAvg = (OffensiveIQ + DefensiveIQ + Dribbling + Passing + Rebounding) / 5.0;
-
-        // Weighted potential: 30% physical, 35% shooting, 35% skill
-        double rawPotential = 0.30 * physAvg + 0.35 * shootAvg + 0.35 * skillAvg;
-
-        // Ensure potential is at least current overall and capped at 99
-        double pot = Math.Max(rawPotential, Overall);
-        pot = Math.Min(pot, 99);
-
-        Potential = Math.Round(pot);
-    }
+        Height      = height,
+        Ratings     = ratings,
+        Archetype   = archetype,
+        Position    = position,
+        Age         = age
+    };
 }

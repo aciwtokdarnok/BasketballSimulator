@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketballSimulator", "BasketballSimulator\BasketballSimulator.csproj", "{07CA52A5-3E11-4B21-AE0D-F11C83A7DB01}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketballSimulator.Core", "BasketballSimulator\BasketballSimulator.Core.csproj", "{07CA52A5-3E11-4B21-AE0D-F11C83A7DB01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketballSimulator.Infrastructure", "BasketballSimulator.Infrastructure\BasketballSimulator.Infrastructure.csproj", "{CF4BBFD9-7156-46C4-9B42-BA20083E4365}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketballSimulator.Logic", "BasketballSimulator.Logic\BasketballSimulator.Logic.csproj", "{5C0A444B-356A-402A-A68E-F87B0FC4E9F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{07CA52A5-3E11-4B21-AE0D-F11C83A7DB01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07CA52A5-3E11-4B21-AE0D-F11C83A7DB01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07CA52A5-3E11-4B21-AE0D-F11C83A7DB01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF4BBFD9-7156-46C4-9B42-BA20083E4365}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF4BBFD9-7156-46C4-9B42-BA20083E4365}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF4BBFD9-7156-46C4-9B42-BA20083E4365}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF4BBFD9-7156-46C4-9B42-BA20083E4365}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C0A444B-356A-402A-A68E-F87B0FC4E9F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C0A444B-356A-402A-A68E-F87B0FC4E9F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C0A444B-356A-402A-A68E-F87B0FC4E9F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C0A444B-356A-402A-A68E-F87B0FC4E9F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
