@@ -13,6 +13,7 @@ public class Player
     public int Height { get; init; }
     public byte HeightRating { get; init; }
     public byte Weight { get; init; }
+    public string Country { get; init; }
     public required RatingPresets Ratings { get; init; }
     public Archetype Archetype { get; init; }
     public Position Position { get; init; }
@@ -52,6 +53,7 @@ public class Player
         int height,
         byte heightRating,
         byte weight,
+        string country,
         RatingPresets ratings,
         Archetype archetype,
         Position position,
@@ -61,6 +63,7 @@ public class Player
         Height          = height,
         HeightRating    = heightRating,
         Weight          = weight,
+        Country         = country,
         Ratings         = ratings,
         Archetype       = archetype,
         Position        = position,
