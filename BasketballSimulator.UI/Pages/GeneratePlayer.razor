@@ -4,11 +4,19 @@
 
 <h1>Generate New Player</h1>
 
-<PlayerForm OnPlayerGenerated="HandleNewPlayer" />
+<PlayerForm CurrentPlayer="NewPlayer"
+            OnPlayerGenerated="HandleNewPlayer"
+            OnPlayerDeveloped="HandleNewPlayer" />
+
 
 @if (NewPlayer != null)
 {
     <PlayerCard PlayerModel="NewPlayer" />
+
+    <!-- scroll wrapper -->
+    <div style="max-height:500px; overflow-y: auto; margin-top:1rem;">
+        <PlayerHistoryTable History="NewPlayer.RatingHistory" />
+    </div>
 }
 
 @code {

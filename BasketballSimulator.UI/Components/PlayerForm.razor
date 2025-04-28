@@ -1,26 +1,54 @@
 ﻿@namespace BasketballSimulator.UI.Components
 @using BasketballSimulator.Core.Interfaces
 @using BasketballSimulator.Core.Models
+@using BasketballSimulator.Core.Utilities
 @inject IPlayerGenerator Generator
 
 <div class="card p-3 mb-3">
-    <h5>Generate a New Player</h5>
+    <h5>Generate or Develop Player</h5>
 
     <div class="mb-2">
         <label>Age:</label>
         <InputNumber @bind-Value="Age" class="form-control" />
     </div>
 
-    <button class="btn btn-primary" @onclick="Generate">Generate</button>
+    <div class="d-flex">
+        <button class="btn btn-primary me-2" @onclick="Generate">Generate</button>
+        @if (CurrentPlayer != null)
+        {
+            <button class="btn btn-secondary" @onclick="DevelopYear">Develop Year</button>
+        }
+    </div>
 </div>
 
 @code {
     [Parameter] public EventCallback<Player> OnPlayerGenerated { get; set; }
+    [Parameter] public EventCallback<Player> OnPlayerDeveloped { get; set; }
+    [Parameter] public Player CurrentPlayer { get; set; }
+
     private int Age { get; set; } = 20;
 
     private async Task Generate()
     {
         var player = Generator.Generate((byte)Age);
         await OnPlayerGenerated.InvokeAsync(player);
+    }
+
+    private async Task DevelopYear()
+    {
+        if (CurrentPlayer == null)
+        {
+            return;
+        }
+
+        // Determine next season year and team from last snapshot
+        var last = CurrentPlayer.RatingHistory[^1];
+        int nextYear = last.Year + 1;
+        string team = last.Team;
+
+        // Apply one year of development (default coaching level: 1)
+        CurrentPlayer.Develop(coachingLevel: 1, nextYear: nextYear, team: team);
+
+        await OnPlayerDeveloped.InvokeAsync(CurrentPlayer);
     }
 }

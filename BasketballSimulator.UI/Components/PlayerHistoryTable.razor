@@ -1,0 +1,117 @@
+﻿@using BasketballSimulator.Core.Enums
+@using BasketballSimulator.Core.Models
+@using Microsoft.AspNetCore.Components
+@using System.Linq
+@using BasketballSimulator.UI.Helpers
+@using System.ComponentModel
+@using System.Reflection
+
+<table class="table table-hover table-sm table-striped table-borderless sticky-xx">
+    <thead>
+        <tr>
+            @foreach (var col in Columns)
+            {
+                <th @onclick="() => OnSort(col.Field)" style="cursor:pointer;" title="@col.Title">
+                    @col.Title
+                    @if (SortField == col.Field)
+                    {
+                        <span>@(SortAscending ? " ↑" : " ↓")</span>
+                    }
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (History == null || !History.Any())
+        {
+            <tr><td colspan="@Columns.Length" class="text-center">No history available</td></tr>
+        }
+        else
+        {
+            foreach (var entry in SortedHistory)
+            {
+                <tr>
+                    <td>@entry.Year</td>
+                    <td>@entry.Team</td>
+                    <td>@entry.Age</td>
+                    <td>@GetDescription(entry.Position)</td>
+                    <td>@entry.Overall</td>
+                    <td>@entry.Potential</td>
+                    <td>@entry.HeightRating</td>
+                    <td>@entry.Strength</td>
+                    <td>@entry.Speed</td>
+                    <td>@entry.Jumping</td>
+                    <td>@entry.Endurance</td>
+                    <td>@entry.Inside</td>
+                    <td>@entry.DunksLayups</td>
+                    <td>@entry.FreeThrows</td>
+                    <td>@entry.MidRange</td>
+                    <td>@entry.ThreePointers</td>
+                    <td>@entry.OffensiveIQ</td>
+                    <td>@entry.DefensiveIQ</td>
+                    <td>@entry.Dribbling</td>
+                    <td>@entry.Passing</td>
+                    <td>@entry.Rebounding</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public IEnumerable<PlayerRatingHistory> History { get; set; }
+
+    // Sorting state
+    private string SortField { get; set; } = nameof(PlayerRatingHistory.Year);
+    private bool SortAscending { get; set; } = true;
+
+    // Define columns: Field name matches property, Title is header text
+    private readonly (string Field, string Title)[] Columns = new[]
+    {
+        (nameof(PlayerRatingHistory.Year), "Year"),
+        (nameof(PlayerRatingHistory.Team), "Team"),
+        (nameof(PlayerRatingHistory.Age), "Age"),
+        (nameof(PlayerRatingHistory.Position), "Pos"),
+        (nameof(PlayerRatingHistory.Overall), "Ovr"),
+        (nameof(PlayerRatingHistory.Potential), "Pot"),
+        (nameof(PlayerRatingHistory.HeightRating), "Hgt"),
+        (nameof(PlayerRatingHistory.Strength), "Str"),
+        (nameof(PlayerRatingHistory.Speed), "Spd"),
+        (nameof(PlayerRatingHistory.Jumping), "Jmp"),
+        (nameof(PlayerRatingHistory.Endurance), "End"),
+        (nameof(PlayerRatingHistory.Inside), "Ins"),
+        (nameof(PlayerRatingHistory.DunksLayups), "Dnk"),
+        (nameof(PlayerRatingHistory.FreeThrows), "FT"),
+        (nameof(PlayerRatingHistory.MidRange), "2Pt"),
+        (nameof(PlayerRatingHistory.ThreePointers), "3Pt"),
+        (nameof(PlayerRatingHistory.OffensiveIQ), "oIQ"),
+        (nameof(PlayerRatingHistory.DefensiveIQ), "dIQ"),
+        (nameof(PlayerRatingHistory.Dribbling), "Drb"),
+        (nameof(PlayerRatingHistory.Passing), "Pss"),
+        (nameof(PlayerRatingHistory.Rebounding), "Reb")
+    };
+
+    // Returns sorted history based on current sort settings
+    private IEnumerable<PlayerRatingHistory> SortedHistory =>
+        History.OrderByDynamic(SortField, SortAscending);
+
+    private void OnSort(string field)
+    {
+        if (SortField == field)
+            SortAscending = !SortAscending;
+        else
+        {
+            SortField = field;
+            SortAscending = true;
+        }
+    }
+
+    // Helper to read enum Description attribute
+    private string GetDescription(Position position)
+    {
+        var fi = position.GetType().GetField(position.ToString());
+        var attr = fi.GetCustomAttribute<DescriptionAttribute>();
+        return attr?.Description ?? position.ToString();
+    }
+}
