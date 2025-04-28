@@ -12,6 +12,7 @@ public class Player
     // Raw data
     public int Height { get; init; }
     public byte HeightRating { get; init; }
+    public byte Weight { get; init; }
     public required RatingPresets Ratings { get; init; }
     public Archetype Archetype { get; init; }
     public Position Position { get; init; }
@@ -50,6 +51,7 @@ public class Player
     public static Player Create(
         int height,
         byte heightRating,
+        byte weight,
         RatingPresets ratings,
         Archetype archetype,
         Position position,
@@ -58,6 +60,7 @@ public class Player
     {
         Height          = height,
         HeightRating    = heightRating,
+        Weight          = weight,
         Ratings         = ratings,
         Archetype       = archetype,
         Position        = position,

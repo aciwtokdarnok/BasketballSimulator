@@ -6,7 +6,6 @@
 @if (PlayerModel != null)
 {
     <div class="player-card-container d-flex overflow-auto small-scrollbar">
-
         <!-- Left info panel -->
         <div class="player-info pe-4 border-end">
             <strong>
@@ -15,9 +14,8 @@
             </strong>
             <br />
 
-            @* height in cm *@
             <span>@($"{PlayerModel.Height} cm")</span>,
-            <span>??? kg</span>
+            <span>@($"{PlayerModel.Weight} kg")</span>
             <br />
 
             @* birth year placeholder *@

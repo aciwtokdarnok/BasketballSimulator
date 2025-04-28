@@ -30,17 +30,13 @@ public class PlayerGenerator : IPlayerGenerator
     /// <returns>A new <see cref="Player"/> with height, ratings, overall, potential, and position set.</returns>
     public Player Generate(byte age)
     {
-        // 1) Sample raw height in inches and add a small random jitter (-0.5 to +0.5 in).
         double rawHeight = HeightExtensions.NextHeightInches() + _rng.NextDouble() - 0.5;
-
-        // 2) Compute height rating from adjusted wingspan, mapped to [0–100].
         double wingspanAdj = rawHeight + _rng.NextInt(-1, 1);
         byte heightRating = HeightExtensions.HeightToRating(wingspanAdj);
 
-        // 3) Select archetype (Point/Wing/Big) based on height rating.
         Archetype archetype = ArchetypeSelector.Select(heightRating);
 
-        // 4) Build global multipliers for athleticism, shooting, skill, and inside.
+        // Build global multipliers for athleticism, shooting, skill, and inside.
         var factors = new RatingFactors(
             Athleticism: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.25),
             Shooting: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.25),
@@ -48,7 +44,7 @@ public class PlayerGenerator : IPlayerGenerator
             Inside: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.25)
         );
 
-        // 5) Randomize base ratings (from RatingPresets) using archetype & factors.
+        // Randomize base ratings (from RatingPresets) using archetype & factors.
         RatingPresets finalRatings = RatingRandomizer.Randomize(
             baseRatings: new RatingPresets(),
             archetype: archetype,
@@ -56,13 +52,16 @@ public class PlayerGenerator : IPlayerGenerator
             rng: _rng
         );
 
-        // 6) Determine the best-fit on-court position.
+        byte weight = WeightHelper.GenerateWeight(heightRating, finalRatings.Strength);
+
+        // Determine the best-fit on-court position.
         Position position = PositionCalculator.ComputePosition(heightRating, finalRatings);
 
-        // 7) Construct and return an immutable Player via the factory method.
+        // Construct and return an immutable Player via the factory method.
         return Player.Create(
             height:         (int)(rawHeight * 2.54),
             heightRating:   heightRating,
+            weight:         weight,
             ratings:        finalRatings,
             archetype:      archetype,
             position:       position,
