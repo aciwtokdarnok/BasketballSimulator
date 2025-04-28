@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketballSimulator.Infrast
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketballSimulator.Logic", "BasketballSimulator.Logic\BasketballSimulator.Logic.csproj", "{5C0A444B-356A-402A-A68E-F87B0FC4E9F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketballSimulator.UI", "BasketballSimulator.UI\BasketballSimulator.UI.csproj", "{6BD4E11A-D7F3-461A-8282-30D90DE73AA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5C0A444B-356A-402A-A68E-F87B0FC4E9F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C0A444B-356A-402A-A68E-F87B0FC4E9F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C0A444B-356A-402A-A68E-F87B0FC4E9F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BD4E11A-D7F3-461A-8282-30D90DE73AA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BD4E11A-D7F3-461A-8282-30D90DE73AA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BD4E11A-D7F3-461A-8282-30D90DE73AA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BD4E11A-D7F3-461A-8282-30D90DE73AA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

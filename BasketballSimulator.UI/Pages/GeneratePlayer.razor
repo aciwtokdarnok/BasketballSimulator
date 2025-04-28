@@ -1,0 +1,21 @@
+﻿@page "/generate-player"
+@using BasketballSimulator.Core.Models
+@using BasketballSimulator.UI.Components
+
+<h1>Generate New Player</h1>
+
+<PlayerForm OnPlayerGenerated="HandleNewPlayer" />
+
+@if (NewPlayer != null)
+{
+    <PlayerCard PlayerModel="NewPlayer" />
+}
+
+@code {
+    private Player NewPlayer;
+
+    private void HandleNewPlayer(Player p)
+    {
+        NewPlayer = p;
+    }
+}

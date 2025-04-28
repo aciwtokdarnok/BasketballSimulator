@@ -1,0 +1,26 @@
+﻿@namespace BasketballSimulator.UI.Components
+@using BasketballSimulator.Core.Interfaces
+@using BasketballSimulator.Core.Models
+@inject IPlayerGenerator Generator
+
+<div class="card p-3 mb-3">
+    <h5>Generate a New Player</h5>
+
+    <div class="mb-2">
+        <label>Age:</label>
+        <InputNumber @bind-Value="Age" class="form-control" />
+    </div>
+
+    <button class="btn btn-primary" @onclick="Generate">Generate</button>
+</div>
+
+@code {
+    [Parameter] public EventCallback<Player> OnPlayerGenerated { get; set; }
+    private int Age { get; set; } = 20;
+
+    private async Task Generate()
+    {
+        var player = Generator.Generate((byte)Age);
+        await OnPlayerGenerated.InvokeAsync(player);
+    }
+}

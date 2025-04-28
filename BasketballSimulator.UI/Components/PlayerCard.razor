@@ -1,0 +1,134 @@
+﻿@namespace BasketballSimulator.UI.Components
+@using BasketballSimulator.Core.Models
+@using BasketballSimulator.Core.Extensions
+@using Microsoft.AspNetCore.Components
+
+@if (PlayerModel != null)
+{
+    <div class="player-card-container d-flex overflow-auto small-scrollbar">
+
+        <!-- Left info panel -->
+        <div class="player-info pe-4 border-end">
+            <strong>
+                @PlayerModel.Position.GetDescription(),
+                Draft Prospect
+            </strong>
+            <br />
+
+            @* height in cm *@
+            <span>@($"{PlayerModel.Height} cm")</span>,
+            <span>??? kg</span>
+            <br />
+
+            @* birth year placeholder *@
+            <span>Born: <b>@(DateTime.Now.Year - PlayerModel.Age)</b></span> -
+            <b>South Carolina, USA</b>
+            <br />
+
+            <span>Age: @PlayerModel.Age</span>
+            <br />
+
+            @* additional placeholders *@
+            <br />
+            Draft: <b>Undrafted 2025</b>
+            <br />
+            College: <b>West Virginia</b>
+            <br />
+            Experience: <b>none</b>
+            <br />
+        </div>
+
+        <!-- Right stats panel -->
+        <div class="stats-panel flex-grow-1 ps-4">
+            <div class="ratings-overview-grid">
+                <h2 class="overall">Overall: @PlayerModel.Overall</h2>
+                <h2 class="potential">Potential: @PlayerModel.Potential</h2>
+
+                <div class="section physical">
+                    <table>
+                        <thead>
+                            <tr class="border-bottom"><th colspan="2" class="p-0">Physical</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="p-0">Height:</td><td class="p-0 ps-1">@PlayerModel.HeightRating</td></tr>
+                            <tr><td class="p-0">Strength:</td><td class="p-0 ps-1">@PlayerModel.Strength</td></tr>
+                            <tr><td class="p-0">Speed:</td><td class="p-0 ps-1">@PlayerModel.Speed</td></tr>
+                            <tr><td class="p-0">Jumping:</td><td class="p-0 ps-1">@PlayerModel.Jumping</td></tr>
+                            <tr><td class="p-0">Endurance:</td><td class="p-0 ps-1">@PlayerModel.Endurance</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section shooting">
+                    <table>
+                        <thead>
+                            <tr class="border-bottom"><th colspan="2" class="p-0">Shooting</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="p-0">Inside:</td><td class="p-0 ps-1">@PlayerModel.Inside</td></tr>
+                            <tr>
+                                <td class="p-0">
+                                    <span class="d-md-none">Layups</span>
+                                    <span class="d-none d-md-inline">Dunks/Layups</span>:
+                                </td>
+                                <td class="p-0 ps-1">@PlayerModel.DunksLayups</td>
+                            </tr>
+                            <tr>
+                                <td class="p-0">
+                                    <span class="d-md-none">FT</span>
+                                    <span class="d-none d-md-inline">Free Throws</span>:
+                                </td>
+                                <td class="p-0 ps-1">@PlayerModel.FreeThrows</td>
+                            </tr>
+                            <tr><td class="p-0">Mid Range:</td><td class="p-0 ps-1">@PlayerModel.MidRange</td></tr>
+                            <tr>
+                                <td class="p-0">
+                                    <span class="d-md-none">3</span>
+                                    <span class="d-none d-md-inline">Three</span> Pointers:
+                                </td>
+                                <td class="p-0 ps-1">@PlayerModel.ThreePointers</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section skill">
+                    <table>
+                        <thead>
+                            <tr class="border-bottom"><th colspan="2" class="p-0">Skill</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-0">
+                                    <span class="d-md-none">Off</span>
+                                    <span class="d-none d-md-inline">Offensive</span> IQ:
+                                </td>
+                                <td class="p-0 ps-1">@PlayerModel.OffensiveIQ</td>
+                            </tr>
+                            <tr>
+                                <td class="p-0">
+                                    <span class="d-md-none">Def</span>
+                                    <span class="d-none d-md-inline">Defensive</span> IQ:
+                                </td>
+                                <td class="p-0 ps-1">@PlayerModel.DefensiveIQ</td>
+                            </tr>
+                            <tr><td class="p-0">Dribbling:</td><td class="p-0 ps-1">@PlayerModel.Dribbling</td></tr>
+                            <tr><td class="p-0">Passing:</td><td class="p-0 ps-1">@PlayerModel.Passing</td></tr>
+                            <tr>
+                                <td class="p-0">
+                                    <span class="d-md-none">Reb</span>
+                                    <span class="d-none d-md-inline">Rebounding</span>:
+                                </td>
+                                <td class="p-0 ps-1">@PlayerModel.Rebounding</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public Player PlayerModel { get; set; }
+}
