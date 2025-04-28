@@ -9,11 +9,14 @@
         <!-- Left info panel -->
         <div class="player-info pe-4 border-end">
             <strong>
+                <b>@PlayerModel.FullName</b>
+            </strong>
+            <br />
+            <strong>
                 @PlayerModel.Position.GetDescription(),
                 Draft Prospect
             </strong>
             <br />
-
             <span>@($"{PlayerModel.Height} cm")</span>,
             <span>@($"{PlayerModel.Weight} kg")</span>
             <br />

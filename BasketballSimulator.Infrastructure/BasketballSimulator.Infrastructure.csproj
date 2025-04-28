@@ -9,5 +9,4 @@
   <ItemGroup>
     <ProjectReference Include="..\BasketballSimulator\BasketballSimulator.Core.csproj" />
   </ItemGroup>
-
 </Project>

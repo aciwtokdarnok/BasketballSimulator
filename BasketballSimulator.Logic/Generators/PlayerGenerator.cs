@@ -33,7 +33,8 @@ public class PlayerGenerator : IPlayerGenerator
         double rawHeight = HeightExtensions.NextHeightInches() + _rng.NextDouble() - 0.5;
         double wingspanAdj = rawHeight + _rng.NextInt(-1, 1);
         byte heightRating = HeightExtensions.HeightToRating(wingspanAdj);
-        string country = CountryGenerator.Generate();
+        string country = CountrySelector.Select();
+        string fullName = NameSelector.GenerateFullName(country);
 
         Archetype archetype = ArchetypeSelector.Select(heightRating);
 
@@ -64,6 +65,7 @@ public class PlayerGenerator : IPlayerGenerator
             heightRating:   heightRating,
             weight:         weight,
             country:        country,
+            fullName:       fullName,
             ratings:        finalRatings,
             archetype:      archetype,
             position:       position,

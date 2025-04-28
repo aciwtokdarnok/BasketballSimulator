@@ -3,7 +3,7 @@
 /// <summary>
 /// Picks a random basketball country according to the historic NBA distribution.
 /// </summary>
-public static class CountryGenerator
+public static class CountrySelector
 {
     // Raw weights from your list
     private static readonly Dictionary<string, int> _weights = new()
@@ -109,7 +109,7 @@ public static class CountryGenerator
     private static readonly List<(string Country, int Cumulative)> _cumulative;
     private static readonly int _totalWeight;
 
-    static CountryGenerator()
+    static CountrySelector()
     {
         _cumulative = new List<(string, int)>(_weights.Count);
         int cum = 0;
@@ -127,7 +127,7 @@ public static class CountryGenerator
     /// <param name="rng">An instance of <see cref="Random"/>.</param>
     /// <returns>The selected country name.</returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public static string Generate()
+    public static string Select()
     {
         var rng = new Random();
 
