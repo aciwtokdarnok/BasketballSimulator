@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 
+namespace BasketballSimulator.Core.Enums;
+
 /// <summary>
 /// All basketball positions, including hybrids, with their standard abbreviations.
 /// </summary>
@@ -30,5 +32,4 @@ public enum Position
 
     [Description("C")]
     Center = 8,
-}
 }

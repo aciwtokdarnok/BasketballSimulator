@@ -1,4 +1,9 @@
-﻿public static class TypeFactors
+﻿using BasketballSimulator.Core.Models;
+using BasketballSimulator.Core.Enums;
+
+namespace BasketballSimulator.Infrastructure.Data;
+
+public static class TypeFactors
 {
     private static readonly Dictionary<Archetype, Dictionary<string, double>> _data = new()
     {

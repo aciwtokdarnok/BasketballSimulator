@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿namespace BasketballSimulator.Logic.Extensions;
+
+/// <summary>
 /// General-purpose numeric helper extensions.
 /// </summary>
 public static class NumericExtensions

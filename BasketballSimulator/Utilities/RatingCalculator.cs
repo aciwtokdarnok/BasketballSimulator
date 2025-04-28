@@ -1,4 +1,8 @@
-﻿/// <summary>
+﻿using BasketballSimulator.Core.Models;
+
+namespace BasketballSimulator.Core.Utilities;
+
+/// <summary>
 /// Domain logic to compute composite ratings (e.g. overall rating).
 /// </summary>
 public static class RatingCalculator

@@ -1,4 +1,7 @@
-﻿using BasketballSim.Core.Enums;
+﻿using BasketballSimulator.Core.Enums;
+using BasketballSimulator.Core.Models;
+
+namespace BasketballSimulator.Core.Utilities;
 
 public static class PositionCalculator
 {

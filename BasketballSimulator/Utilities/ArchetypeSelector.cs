@@ -1,4 +1,8 @@
-﻿/// <summary>
+﻿using BasketballSimulator.Core.Enums;
+
+namespace BasketballSimulator.Core.Utilities;
+
+/// <summary>
 /// Encapsulates the logic for choosing an Archetype (Point/Wing/Big)
 /// based on a height rating and a bit of randomness.
 /// </summary>

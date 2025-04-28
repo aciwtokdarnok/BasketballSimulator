@@ -1,4 +1,6 @@
-﻿public static class HeightExtensions
+﻿namespace BasketballSimulator.Logic.Extensions;
+
+public static class HeightExtensions
 {
     // Statyczna tablica par (prawdopodobieństwo, wzrost w calach).
     // Musi być posortowana rosnąco według cutoff.

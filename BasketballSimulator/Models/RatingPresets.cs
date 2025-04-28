@@ -1,4 +1,6 @@
-﻿public class RatingPresets
+﻿namespace BasketballSimulator.Core.Models;
+
+public class RatingPresets
 {
     public byte Strength { get; set; }
     public byte Speed { get; set; }

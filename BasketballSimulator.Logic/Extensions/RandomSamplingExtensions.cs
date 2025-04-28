@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿namespace BasketballSimulator.Logic.Extensions;
+
+/// <summary>
 /// Adds sampling-related extensions to <see cref="Random"/>,
 /// e.g. Gaussian draws and inclusive integer ranges.
 /// </summary>

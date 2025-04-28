@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
+namespace BasketballSimulator.Core.Extensions;
+
 public static class EnumExtensions
 {
     /// <summary>

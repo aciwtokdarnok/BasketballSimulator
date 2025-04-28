@@ -1,4 +1,10 @@
-﻿using System.Reflection;
+﻿using BasketballSimulator.Core.Enums;
+using BasketballSimulator.Core.Models;
+using BasketballSimulator.Infrastructure.Data;
+using BasketballSimulator.Logic.Extensions;
+using System.Reflection;
+
+namespace BasketballSimulator.Logic.Generators;
 
 /// <summary>
 /// Applies archetype‐ and group‐based modifiers plus Gaussian noise

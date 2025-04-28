@@ -1,4 +1,12 @@
-﻿/// <summary>
+﻿using BasketballSimulator.Core.Enums;
+using BasketballSimulator.Core.Interfaces;
+using BasketballSimulator.Core.Models;
+using BasketballSimulator.Core.Utilities;
+using BasketballSimulator.Logic.Extensions;
+
+namespace BasketballSimulator.Logic.Generators;
+
+/// <summary>
 /// Generates new <see cref="Player"/> instances with randomized ratings and attributes.
 /// </summary>
 public class PlayerGenerator : IPlayerGenerator
@@ -34,10 +42,10 @@ public class PlayerGenerator : IPlayerGenerator
 
         // 4) Build global multipliers for athleticism, shooting, skill, and inside.
         var factors = new RatingFactors(
-            Athleticism: _rng.NextGaussian(1, 0.2).Clamp(0.2, 1.2),
-            Shooting: _rng.NextGaussian(1, 0.2).Clamp(0.2, 1.2),
-            Skill: _rng.NextGaussian(1, 0.2).Clamp(0.2, 1.2),
-            Inside: _rng.NextGaussian(1, 0.2).Clamp(0.2, 1.2)
+            Athleticism: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.25),
+            Shooting: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.25),
+            Skill: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.25),
+            Inside: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.25)
         );
 
         // 5) Randomize base ratings (from RatingPresets) using archetype & factors.
@@ -53,11 +61,12 @@ public class PlayerGenerator : IPlayerGenerator
 
         // 7) Construct and return an immutable Player via the factory method.
         return Player.Create(
-            height:    heightRating,
-            ratings:   finalRatings,
-            archetype: archetype,
-            position:  position,
-            age:       age        
+            height:         (int)(rawHeight * 2.54),
+            heightRating:   heightRating,
+            ratings:        finalRatings,
+            archetype:      archetype,
+            position:       position,
+            age:            age        
         );
     }
 }

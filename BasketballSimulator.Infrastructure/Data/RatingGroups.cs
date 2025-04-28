@@ -1,4 +1,8 @@
-﻿public static class RatingGroups
+﻿using BasketballSimulator.Core.Models;
+
+namespace BasketballSimulator.Infrastructure.Data;
+
+public static class RatingGroups
 {
     public static readonly IReadOnlySet<string> Athleticism = new HashSet<string>
     {

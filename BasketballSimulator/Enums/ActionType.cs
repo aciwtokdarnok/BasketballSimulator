@@ -1,4 +1,6 @@
-﻿public enum ActionType
+﻿namespace BasketballSimulator.Core.Enums;
+
+public enum ActionType
 {
     ThreePoint,
     MidRange,
