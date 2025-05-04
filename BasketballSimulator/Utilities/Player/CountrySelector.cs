@@ -1,4 +1,4 @@
-﻿namespace BasketballSimulator.Core.Utilities;
+﻿namespace BasketballSimulator.Core.Utilities.Player;
 
 /// <summary>
 /// Picks a random basketball country according to the historic NBA distribution.

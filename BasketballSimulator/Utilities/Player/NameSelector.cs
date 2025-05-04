@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 
-namespace BasketballSimulator.Core.Utilities;
+namespace BasketballSimulator.Core.Utilities.Player;
 
 /// <summary>
 /// Generates random first and last names based on country-specific distributions.

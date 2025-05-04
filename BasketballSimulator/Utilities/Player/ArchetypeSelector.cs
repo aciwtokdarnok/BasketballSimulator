@@ -1,6 +1,6 @@
 ﻿using BasketballSimulator.Core.Enums.Player;
 
-namespace BasketballSimulator.Core.Utilities;
+namespace BasketballSimulator.Core.Utilities.Player;
 
 /// <summary>
 /// Encapsulates the logic for choosing an Archetype (Point/Wing/Big)

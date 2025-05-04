@@ -1,7 +1,7 @@
 ﻿using BasketballSimulator.Core.Enums.Player;
 using BasketballSimulator.Core.Interfaces.Player;
 using BasketballSimulator.Core.Models.Player;
-using BasketballSimulator.Core.Utilities;
+using BasketballSimulator.Core.Utilities.Player;
 using BasketballSimulator.Logic.Extensions;
 using BasketballSimulator.Logic.Extensions.Player;
 

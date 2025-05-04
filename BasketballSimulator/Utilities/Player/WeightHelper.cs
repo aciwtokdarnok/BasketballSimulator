@@ -1,4 +1,4 @@
-﻿namespace BasketballSimulator.Core.Utilities;
+﻿namespace BasketballSimulator.Core.Utilities.Player;
 
 /// <summary>
 /// Generates a realistic basketball player weight (in kilograms)

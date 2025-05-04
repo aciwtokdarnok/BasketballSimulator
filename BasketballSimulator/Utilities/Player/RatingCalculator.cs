@@ -1,7 +1,7 @@
 ﻿using BasketballSimulator.Core.Extensions;
 using BasketballSimulator.Core.Models.Player;
 
-namespace BasketballSimulator.Core.Utilities;
+namespace BasketballSimulator.Core.Utilities.Player;
 
 /// <summary>
 /// Domain logic to compute composite ratings (e.g. overall rating).

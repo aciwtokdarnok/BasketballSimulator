@@ -5,7 +5,7 @@ using BasketballSimulator.Core.Enums;
 using BasketballSimulator.Core.Extensions;
 using BasketballSimulator.Core.Models.Player;
 
-namespace BasketballSimulator.Core.Utilities
+namespace BasketballSimulator.Core.Utilities.Player
 {
     /// <summary>
     /// Handles per-season development of player ratings based on age, coaching, and potential gap.
@@ -43,7 +43,7 @@ namespace BasketballSimulator.Core.Utilities
         /// </summary>
         /// <param name="player">Target player (will be mutated).</param>
         /// <param name="coachingLevel">Coaching quality, influences base change.</param>
-        public static void DevelopSeason(Player player)
+        public static void DevelopSeason(Models.Player.Player player)
         {
             GrowHeightIfYoung(player);
 
@@ -61,8 +61,8 @@ namespace BasketballSimulator.Core.Utilities
             // Ensure Overall never exceeds Potential
             if (player.Overall > player.Potential)
             {
-                typeof(Player)
-                    .GetProperty(nameof(Player.Potential), BindingFlags.Public | BindingFlags.Instance)!
+                typeof(Models.Player.Player)
+                    .GetProperty(nameof(Models.Player.Player.Potential), BindingFlags.Public | BindingFlags.Instance)!
                     .SetValue(player, player.Overall);
             }
         }
@@ -77,7 +77,7 @@ namespace BasketballSimulator.Core.Utilities
         /// - For ages <29: adds random noise [-2,2].
         /// - For ages >34: decays potential towards current overall, more steeply with age.
         /// </summary>
-        private static void AdjustPotential(Player player)
+        private static void AdjustPotential(Models.Player.Player player)
         {
             int age = player.Age;
             int currentPot = player.Potential;
@@ -107,22 +107,22 @@ namespace BasketballSimulator.Core.Utilities
             // Update only if changed
             if (newPot != player.Potential)
             {
-                typeof(Player)
-                    .GetProperty(nameof(Player.Potential), BindingFlags.Public | BindingFlags.Instance)!
+                typeof(Models.Player.Player)
+                    .GetProperty(nameof(Models.Player.Player.Potential), BindingFlags.Public | BindingFlags.Instance)!
                     .SetValue(player, newPot);
             }
         }
 
-        private static void GrowHeightIfYoung(Player player)
+        private static void GrowHeightIfYoung(Models.Player.Player player)
         {
             if (player.Age > 21) return;
 
             int roll = _random.NextInt(1, 1000);
-            if ((roll > 999 || (roll > 990 && player.Age <= 20)) && player.HeightRating < 100)
+            if ((roll > 999 || roll > 990 && player.Age <= 20) && player.HeightRating < 100)
             {
                 // Reflection to overwrite init-only property
-                typeof(Player)
-                    .GetProperty(nameof(Player.HeightRating), BindingFlags.Public | BindingFlags.Instance)!
+                typeof(Models.Player.Player)
+                    .GetProperty(nameof(Models.Player.Player.HeightRating), BindingFlags.Public | BindingFlags.Instance)!
                     .SetValue(player, (byte)(player.HeightRating + 1));
             }
         }

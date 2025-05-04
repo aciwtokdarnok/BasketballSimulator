@@ -1,5 +1,5 @@
 ﻿using BasketballSimulator.Core.Enums.Player;
-using BasketballSimulator.Core.Utilities;
+using BasketballSimulator.Core.Utilities.Player;
 
 namespace BasketballSimulator.Core.Models.Player;
 
