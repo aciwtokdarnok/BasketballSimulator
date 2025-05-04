@@ -1,6 +1,6 @@
-﻿using BasketballSimulator.Core.Models;
+﻿using BasketballSimulator.Core.Models.Player;
 
-namespace BasketballSimulator.Infrastructure.Data;
+namespace BasketballSimulator.Infrastructure.Data.Player;
 
 public static class RatingGroups
 {

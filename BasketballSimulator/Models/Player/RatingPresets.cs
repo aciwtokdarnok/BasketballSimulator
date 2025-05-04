@@ -1,4 +1,4 @@
-﻿namespace BasketballSimulator.Core.Models;
+﻿namespace BasketballSimulator.Core.Models.Player;
 
 public class RatingPresets
 {

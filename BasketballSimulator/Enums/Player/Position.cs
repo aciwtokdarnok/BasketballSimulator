@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace BasketballSimulator.Core.Enums;
+namespace BasketballSimulator.Core.Enums.Player;
 
 /// <summary>
 /// All basketball positions, including hybrids, with their standard abbreviations.

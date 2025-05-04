@@ -1,7 +1,7 @@
-﻿using BasketballSimulator.Core.Enums;
+﻿using BasketballSimulator.Core.Enums.Player;
 using BasketballSimulator.Core.Utilities;
 
-namespace BasketballSimulator.Core.Models;
+namespace BasketballSimulator.Core.Models.Player;
 
 /// <summary>
 /// Represents a basketball player with core ratings and metadata.

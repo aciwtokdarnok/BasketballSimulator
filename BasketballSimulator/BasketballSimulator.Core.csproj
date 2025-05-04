@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Data\names.json" />
+    <EmbeddedResource Include="Data\Player\names.json" />
   </ItemGroup>
 
 </Project>

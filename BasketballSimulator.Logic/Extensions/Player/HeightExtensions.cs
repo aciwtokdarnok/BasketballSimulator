@@ -1,4 +1,4 @@
-﻿namespace BasketballSimulator.Logic.Extensions;
+﻿namespace BasketballSimulator.Logic.Extensions.Player;
 
 public static class HeightExtensions
 {

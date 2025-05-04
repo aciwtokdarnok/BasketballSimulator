@@ -1,4 +1,4 @@
-﻿using BasketballSimulator.Core.Enums;
+﻿using BasketballSimulator.Core.Enums.Player;
 
 namespace BasketballSimulator.Core.Utilities;
 

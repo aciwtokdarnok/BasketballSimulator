@@ -1,4 +1,4 @@
-﻿namespace BasketballSimulator.Core.Enums;
+﻿namespace BasketballSimulator.Core.Enums.Player;
 
 public enum Archetype
 {

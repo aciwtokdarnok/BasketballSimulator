@@ -1,5 +1,5 @@
-﻿using BasketballSimulator.Core.Models;
-using BasketballSimulator.Core.Extensions;
+﻿using BasketballSimulator.Core.Extensions;
+using BasketballSimulator.Core.Models.Player;
 
 namespace BasketballSimulator.Core.Utilities;
 

@@ -1,4 +1,4 @@
-﻿namespace BasketballSimulator.Core.Models;
+﻿namespace BasketballSimulator.Core.Models.Player;
 
 /// <summary>
 /// Holds the four global multipliers used when randomizing ratings.

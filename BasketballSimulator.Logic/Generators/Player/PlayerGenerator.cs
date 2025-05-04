@@ -1,10 +1,11 @@
-﻿using BasketballSimulator.Core.Enums;
-using BasketballSimulator.Core.Interfaces;
-using BasketballSimulator.Core.Models;
+﻿using BasketballSimulator.Core.Enums.Player;
+using BasketballSimulator.Core.Interfaces.Player;
+using BasketballSimulator.Core.Models.Player;
 using BasketballSimulator.Core.Utilities;
 using BasketballSimulator.Logic.Extensions;
+using BasketballSimulator.Logic.Extensions.Player;
 
-namespace BasketballSimulator.Logic.Generators;
+namespace BasketballSimulator.Logic.Generators.Player;
 
 /// <summary>
 /// Generates new <see cref="Player"/> instances with randomized ratings and attributes.
@@ -28,7 +29,7 @@ public class PlayerGenerator : IPlayerGenerator
     /// Creates a fully populated <see cref="Player"/>.
     /// </summary>
     /// <returns>A new <see cref="Player"/> with height, ratings, overall, potential, and position set.</returns>
-    public Player Generate(byte age)
+    public Core.Models.Player.Player Generate(byte age)
     {
         double rawHeight = HeightExtensions.NextHeightInches() + _rng.NextDouble() - 0.5;
         double wingspanAdj = rawHeight + _rng.NextInt(-1, 1);
@@ -60,7 +61,7 @@ public class PlayerGenerator : IPlayerGenerator
         Position position = PositionCalculator.ComputePosition(heightRating, finalRatings);
 
         // Construct and return an immutable Player via the factory method.
-        return Player.Create(
+        return Core.Models.Player.Player.Create(
             height:         (int)(rawHeight * 2.54),
             heightRating:   heightRating,
             weight:         weight,

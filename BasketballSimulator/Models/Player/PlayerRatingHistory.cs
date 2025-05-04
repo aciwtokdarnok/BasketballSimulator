@@ -1,6 +1,6 @@
-﻿using BasketballSimulator.Core.Enums;
+﻿using BasketballSimulator.Core.Enums.Player;
 
-namespace BasketballSimulator.Core.Models;
+namespace BasketballSimulator.Core.Models.Player;
 
 /// <summary>
 /// Represents a snapshot of a player's ratings for one season.
