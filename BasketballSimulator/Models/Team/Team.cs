@@ -38,6 +38,13 @@ public class Team
     public Division Division { get; init; }
 
     /// <summary>
+    /// The list of players currently on the team.
+    /// </summary>
+    public List<Player.Player> Roster { get; set; } = new();
+
+    private Team() { }
+
+    /// <summary>
     /// Creates a new instance of <see cref="Team"/>.
     /// </summary>
     /// <param name="name">Official team nickname.</param>
@@ -53,16 +60,15 @@ public class Team
         string arena,
         int foundedYear,
         Conference conference,
-        Division division)
+        Division division
+    ) => new Team
     {
-        return new Team
-        {
-            Name = name,
-            City = city,
-            Arena = arena,
-            FoundedYear = foundedYear,
-            Conference = conference,
-            Division = division
-        };
-    }
+        Name =          name,
+        City =          city,
+        Arena =         arena,
+        FoundedYear =   foundedYear,
+        Conference =    conference,
+        Division =      division,
+        Roster =        new List<Player.Player>()
+    };
 }

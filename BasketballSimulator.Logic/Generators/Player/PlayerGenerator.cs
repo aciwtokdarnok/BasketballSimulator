@@ -20,57 +20,61 @@ public class PlayerGenerator : IPlayerGenerator
     /// <param name="rng">
     /// A <see cref="Random"/> number generator, ideally injected for testability.
     /// </param>
-    public PlayerGenerator(Random rng)
-    {
-        _rng = rng;
-    }
+    public PlayerGenerator(Random rng) => _rng = rng;
 
     /// <summary>
     /// Creates a fully populated <see cref="Player"/>.
     /// </summary>
     /// <returns>A new <see cref="Player"/> with height, ratings, overall, potential, and position set.</returns>
-    public Core.Models.Player.Player Generate(byte age)
+    public Core.Models.Player.Player Generate(byte age, Archetype? targetArchetype = null)
     {
-        double rawHeight = HeightExtensions.NextHeightInches() + _rng.NextDouble() - 0.5;
-        double wingspanAdj = rawHeight + _rng.NextInt(-1, 1);
-        byte heightRating = HeightExtensions.HeightToRating(wingspanAdj);
-        string country = CountrySelector.Select();
-        string fullName = NameSelector.GenerateFullName(country);
+        while (true)
+        {
+            double rawHeight = HeightExtensions.NextHeightInches() + _rng.NextDouble() - 0.5;
+            double wingspanAdj = rawHeight + _rng.NextInt(-1, 1);
+            byte heightRating = HeightExtensions.HeightToRating(wingspanAdj);
+            string country = CountrySelector.Select();
+            string fullName = NameSelector.GenerateFullName(country);
 
-        Archetype archetype = ArchetypeSelector.Select(heightRating);
+            Archetype archetype = ArchetypeSelector.Select(heightRating);
+            if (targetArchetype.HasValue && targetArchetype != archetype)
+            {
+                continue;
+            }
 
-        // Build global multipliers for athleticism, shooting, skill, and inside.
-        var factors = new RatingFactors(
-            Athleticism: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.25),
-            Shooting: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.25),
-            Skill: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.25),
-            Inside: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.25)
-        );
+            // Build global multipliers for athleticism, shooting, skill, and inside.
+            var factors = new RatingFactors(
+                Athleticism: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.3),
+                Shooting: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.3),
+                Skill: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.3),
+                Inside: _rng.NextGaussian(1, 0.2).Clamp(0.5, 1.3)
+            );
 
-        // Randomize base ratings (from RatingPresets) using archetype & factors.
-        RatingPresets finalRatings = RatingRandomizer.Randomize(
-            baseRatings: new RatingPresets(),
-            archetype: archetype,
-            factors: factors,
-            rng: _rng
-        );
+            // Randomize base ratings (from RatingPresets) using archetype & factors.
+            RatingPresets finalRatings = RatingRandomizer.Randomize(
+                baseRatings: new RatingPresets(),
+                archetype: archetype,
+                factors: factors,
+                rng: _rng
+            );
 
-        byte weight = WeightHelper.GenerateWeight(heightRating, finalRatings.Strength);
+            byte weight = WeightHelper.GenerateWeight(heightRating, finalRatings.Strength);
 
-        // Determine the best-fit on-court position.
-        Position position = PositionCalculator.ComputePosition(heightRating, finalRatings);
+            // Determine the best-fit on-court position.
+            Position position = PositionCalculator.ComputePosition(heightRating, finalRatings);
 
-        // Construct and return an immutable Player via the factory method.
-        return Core.Models.Player.Player.Create(
-            height:         (int)(rawHeight * 2.54),
-            heightRating:   heightRating,
-            weight:         weight,
-            country:        country,
-            fullName:       fullName,
-            ratings:        finalRatings,
-            archetype:      archetype,
-            position:       position,
-            age:            age        
-        );
+            // Construct and return an immutable Player via the factory method.
+            return Core.Models.Player.Player.Create(
+                height: (int)(rawHeight * 2.54),
+                heightRating: heightRating,
+                weight: weight,
+                country: country,
+                fullName: fullName,
+                ratings: finalRatings,
+                archetype: archetype,
+                position: position,
+                age: age
+            );
+        }
     }
 }

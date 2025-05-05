@@ -131,10 +131,9 @@ public class Player
     /// Advances the player by one season: applies development,
     /// increments age, and snapshots the new ratings.
     /// </summary>
-    /// <param name="coachingLevel">Coaching level for development.</param>
     /// <param name="nextYear">The upcoming season year.</param>
     /// <param name="team">Team name or abbreviation for the new season.</param>
-    public void Develop(int coachingLevel, int nextYear, string team)
+    public void Develop(int nextYear, string team)
     {
         // Apply development to ratings and height
         PlayerDevelopmentService.DevelopSeason(this);
