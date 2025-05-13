@@ -1,4 +1,4 @@
-﻿using BasketballSimulator.Core.Enums.Team;
+﻿using BasketballSimulator.Core.Enums.Teams;
 
 namespace BasketballSimulator.Core.Models.Team;
 
@@ -40,7 +40,7 @@ public class Team
     /// <summary>
     /// The list of players currently on the team.
     /// </summary>
-    public List<Player.Player> Roster { get; set; } = new();
+    public List<Players.Player> Roster { get; set; } = new();
 
     private Team() { }
 
@@ -69,6 +69,6 @@ public class Team
         FoundedYear =   foundedYear,
         Conference =    conference,
         Division =      division,
-        Roster =        new List<Player.Player>()
+        Roster =        new List<Players.Player>()
     };
 }

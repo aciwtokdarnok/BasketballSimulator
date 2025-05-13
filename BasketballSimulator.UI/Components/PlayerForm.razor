@@ -1,8 +1,9 @@
 ﻿@namespace BasketballSimulator.UI.Components
 @using BasketballSimulator.Core.Interfaces
-@using BasketballSimulator.Core.Interfaces.Player
+@using BasketballSimulator.Core.Interfaces.Players
 @using BasketballSimulator.Core.Models
-@using BasketballSimulator.Core.Models.Player
+@using BasketballSimulator.Core.Models.Players
+@using BasketballSimulator.Core.Enums.Players
 @using BasketballSimulator.Core.Utilities
 @inject IPlayerGenerator Generator
 
@@ -12,6 +13,17 @@
     <div class="mb-2">
         <label>Age:</label>
         <InputNumber @bind-Value="Age" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Archetype:</label>
+        <select class="form-select" @bind="SelectedArchetype">
+            <option value="">Random</option>
+            @foreach (var archetype in Enum.GetValues<Archetype>())
+            {
+                <option value="@archetype">@archetype</option>
+            }
+        </select>
     </div>
 
     <div class="d-flex">
@@ -29,10 +41,11 @@
     [Parameter] public Player CurrentPlayer { get; set; }
 
     private int Age { get; set; } = 20;
+    private Archetype? SelectedArchetype { get; set; } = null;
 
     private async Task Generate()
     {
-        var player = Generator.Generate((byte)Age);
+        var player = Generator.Generate(Age, SelectedArchetype);
         await OnPlayerGenerated.InvokeAsync(player);
     }
 
@@ -48,8 +61,8 @@
         int nextYear = last.Year + 1;
         string team = last.Team;
 
-        // Apply one year of development (default coaching level: 1)
-        CurrentPlayer.Develop(coachingLevel: 1, nextYear: nextYear, team: team);
+        // Apply one year of development 
+        CurrentPlayer.Develop(nextYear, team);
 
         await OnPlayerDeveloped.InvokeAsync(CurrentPlayer);
     }

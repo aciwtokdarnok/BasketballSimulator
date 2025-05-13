@@ -1,8 +1,9 @@
-﻿using BasketballSimulator.Core.Enums.Player;
+﻿using BasketballSimulator.Core.Enums.Players;
+using BasketballSimulator.Core.Models.Players;
 
-namespace BasketballSimulator.Core.Interfaces.Player;
+namespace BasketballSimulator.Core.Interfaces.Players;
 
 public interface IPlayerGenerator
 {
-    Models.Player.Player Generate(byte age, Archetype? targetArchetype);
+    Player Generate(int age, Archetype? targetArchetype);
 }

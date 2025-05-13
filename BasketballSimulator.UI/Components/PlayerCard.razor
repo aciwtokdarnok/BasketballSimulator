@@ -1,7 +1,5 @@
 ﻿@namespace BasketballSimulator.UI.Components
-@using BasketballSimulator.Core.Extensions
-@using BasketballSimulator.Core.Models
-@using BasketballSimulator.Core.Models.Player
+@using BasketballSimulator.Core.Models.Players
 @using Microsoft.AspNetCore.Components
 
 @if (PlayerModel != null)
@@ -14,118 +12,114 @@
             </strong>
             <br />
             <strong>
-                @PlayerModel.Position.GetDescription(),
-                Draft Prospect
+                @PlayerModel.Archetype.ToString(), @PlayerModel.Position.ToString()
             </strong>
             <br />
             <span>@($"{PlayerModel.Height} cm")</span>,
             <span>@($"{PlayerModel.Weight} kg")</span>
             <br />
-
-            @* birth year placeholder *@
-            <span>Born: <b>@(DateTime.Now.Year - PlayerModel.Age)</b></span> -
-            <b>@PlayerModel.Country</b>
+            <span>Country: <b>@PlayerModel.Country</b></span>
             <br />
-
-            <span>Age: @PlayerModel.Age</span>
+            <span>Age: <b>@PlayerModel.Age</b></span>
             <br />
-
-            @* additional placeholders *@
+            <span>Potential: <b>@PlayerModel.Potential</b></span>
             <br />
-            Draft: <b>Undrafted 2025</b>
+            <span>Intangibles: <b>@PlayerModel.Intangibles</b></span>
             <br />
-            College: <b>West Virginia</b>
+            <span>Total Attributes: <b>@PlayerModel.TotalAttributes</b></span>
             <br />
-            Experience: <b>none</b>
+            <span>Overall: <b>@PlayerModel.Overall</b></span>
             <br />
         </div>
 
         <!-- Right stats panel -->
         <div class="stats-panel flex-grow-1 ps-4">
             <div class="ratings-overview-grid">
-                <h2 class="overall">Overall: @PlayerModel.Overall</h2>
-                <h2 class="potential">Potential: @PlayerModel.Potential</h2>
 
-                <div class="section physical">
+                <div class="section">
+                    <h5>Athleticism</h5>
                     <table>
-                        <thead>
-                            <tr class="border-bottom"><th colspan="2" class="p-0">Physical</th></tr>
-                        </thead>
                         <tbody>
-                            <tr><td class="p-0">Height:</td><td class="p-0 ps-1">@PlayerModel.HeightRating</td></tr>
-                            <tr><td class="p-0">Strength:</td><td class="p-0 ps-1">@PlayerModel.Strength</td></tr>
-                            <tr><td class="p-0">Speed:</td><td class="p-0 ps-1">@PlayerModel.Speed</td></tr>
-                            <tr><td class="p-0">Jumping:</td><td class="p-0 ps-1">@PlayerModel.Jumping</td></tr>
-                            <tr><td class="p-0">Endurance:</td><td class="p-0 ps-1">@PlayerModel.Endurance</td></tr>
+                            <tr><td>Height Rating:</td><td>@PlayerModel.Athleticism.HeightRating</td></tr>
+                            <tr><td>Speed:</td><td>@PlayerModel.Athleticism.Speed</td></tr>
+                            <tr><td>Agility:</td><td>@PlayerModel.Athleticism.Agility</td></tr>
+                            <tr><td>Strength:</td><td>@PlayerModel.Athleticism.Strength</td></tr>
+                            <tr><td>Vertical:</td><td>@PlayerModel.Athleticism.Vertical</td></tr>
+                            <tr><td>Stamina:</td><td>@PlayerModel.Athleticism.Stamina</td></tr>
+                            <tr><td>Hustle:</td><td>@PlayerModel.Athleticism.Hustle</td></tr>
+                            <tr><td>Overall Durability:</td><td>@PlayerModel.Athleticism.OverallDurability</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="section shooting">
+                <div class="section">
+                    <h5>Outside Scoring</h5>
                     <table>
-                        <thead>
-                            <tr class="border-bottom"><th colspan="2" class="p-0">Shooting</th></tr>
-                        </thead>
                         <tbody>
-                            <tr><td class="p-0">Inside:</td><td class="p-0 ps-1">@PlayerModel.Inside</td></tr>
-                            <tr>
-                                <td class="p-0">
-                                    <span class="d-md-none">Layups</span>
-                                    <span class="d-none d-md-inline">Dunks/Layups</span>:
-                                </td>
-                                <td class="p-0 ps-1">@PlayerModel.DunksLayups</td>
-                            </tr>
-                            <tr>
-                                <td class="p-0">
-                                    <span class="d-md-none">FT</span>
-                                    <span class="d-none d-md-inline">Free Throws</span>:
-                                </td>
-                                <td class="p-0 ps-1">@PlayerModel.FreeThrows</td>
-                            </tr>
-                            <tr><td class="p-0">Mid Range:</td><td class="p-0 ps-1">@PlayerModel.MidRange</td></tr>
-                            <tr>
-                                <td class="p-0">
-                                    <span class="d-md-none">3</span>
-                                    <span class="d-none d-md-inline">Three</span> Pointers:
-                                </td>
-                                <td class="p-0 ps-1">@PlayerModel.ThreePointers</td>
-                            </tr>
+                            <tr><td>Close Shot:</td><td>@PlayerModel.OutsideScoring.CloseShot</td></tr>
+                            <tr><td>Mid Range Shot:</td><td>@PlayerModel.OutsideScoring.MidRangeShot</td></tr>
+                            <tr><td>Three Point Shot:</td><td>@PlayerModel.OutsideScoring.ThreePointShot</td></tr>
+                            <tr><td>Free Throw:</td><td>@PlayerModel.OutsideScoring.FreeThrow</td></tr>
+                            <tr><td>Shot IQ:</td><td>@PlayerModel.OutsideScoring.ShotIQ</td></tr>
+                            <tr><td>Offensive Consistency:</td><td>@PlayerModel.OutsideScoring.OffensiveConsistency</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="section skill">
+                <div class="section">
+                    <h5>Inside Scoring</h5>
                     <table>
-                        <thead>
-                            <tr class="border-bottom"><th colspan="2" class="p-0">Skill</th></tr>
-                        </thead>
                         <tbody>
-                            <tr>
-                                <td class="p-0">
-                                    <span class="d-md-none">Off</span>
-                                    <span class="d-none d-md-inline">Offensive</span> IQ:
-                                </td>
-                                <td class="p-0 ps-1">@PlayerModel.OffensiveIQ</td>
-                            </tr>
-                            <tr>
-                                <td class="p-0">
-                                    <span class="d-md-none">Def</span>
-                                    <span class="d-none d-md-inline">Defensive</span> IQ:
-                                </td>
-                                <td class="p-0 ps-1">@PlayerModel.DefensiveIQ</td>
-                            </tr>
-                            <tr><td class="p-0">Dribbling:</td><td class="p-0 ps-1">@PlayerModel.Dribbling</td></tr>
-                            <tr><td class="p-0">Passing:</td><td class="p-0 ps-1">@PlayerModel.Passing</td></tr>
-                            <tr>
-                                <td class="p-0">
-                                    <span class="d-md-none">Reb</span>
-                                    <span class="d-none d-md-inline">Rebounding</span>:
-                                </td>
-                                <td class="p-0 ps-1">@PlayerModel.Rebounding</td>
-                            </tr>
+                            <tr><td>Layup:</td><td>@PlayerModel.InsideScoring.Layup</td></tr>
+                            <tr><td>Standing Dunk:</td><td>@PlayerModel.InsideScoring.StandingDunk</td></tr>
+                            <tr><td>Driving Dunk:</td><td>@PlayerModel.InsideScoring.DrivingDunk</td></tr>
+                            <tr><td>Post Hook:</td><td>@PlayerModel.InsideScoring.PostHook</td></tr>
+                            <tr><td>Post Fade:</td><td>@PlayerModel.InsideScoring.PostFade</td></tr>
+                            <tr><td>Post Control:</td><td>@PlayerModel.InsideScoring.PostControl</td></tr>
+                            <tr><td>Draw Foul:</td><td>@PlayerModel.InsideScoring.DrawFoul</td></tr>
+                            <tr><td>Hands:</td><td>@PlayerModel.InsideScoring.Hands</td></tr>
                         </tbody>
                     </table>
                 </div>
+
+                <div class="section">
+                    <h5>Playmaking</h5>
+                    <table>
+                        <tbody>
+                            <tr><td>Pass Accuracy:</td><td>@PlayerModel.Playmaking.PassAccuracy</td></tr>
+                            <tr><td>Ball Handle:</td><td>@PlayerModel.Playmaking.BallHandle</td></tr>
+                            <tr><td>Speed With Ball:</td><td>@PlayerModel.Playmaking.SpeedWithBall</td></tr>
+                            <tr><td>Pass IQ:</td><td>@PlayerModel.Playmaking.PassIQ</td></tr>
+                            <tr><td>Pass Vision:</td><td>@PlayerModel.Playmaking.PassVision</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section">
+                    <h5>Defense</h5>
+                    <table>
+                        <tbody>
+                            <tr><td>Interior Defense:</td><td>@PlayerModel.Defense.InteriorDefense</td></tr>
+                            <tr><td>Perimeter Defense:</td><td>@PlayerModel.Defense.PerimeterDefense</td></tr>
+                            <tr><td>Steal:</td><td>@PlayerModel.Defense.Steal</td></tr>
+                            <tr><td>Block:</td><td>@PlayerModel.Defense.Block</td></tr>
+                            <tr><td>Help Defense IQ:</td><td>@PlayerModel.Defense.HelpDefenseIQ</td></tr>
+                            <tr><td>Pass Perception:</td><td>@PlayerModel.Defense.PassPerception</td></tr>
+                            <tr><td>Defensive Consistency:</td><td>@PlayerModel.Defense.DefensiveConsistency</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section">
+                    <h5>Rebounding</h5>
+                    <table>
+                        <tbody>
+                            <tr><td>Offensive Rebound:</td><td>@PlayerModel.Rebounding.OffensiveRebound</td></tr>
+                            <tr><td>Defensive Rebound:</td><td>@PlayerModel.Rebounding.DefensiveRebound</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
     </div>

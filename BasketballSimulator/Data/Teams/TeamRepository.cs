@@ -1,7 +1,7 @@
-﻿using BasketballSimulator.Core.Enums.Team;
+﻿using BasketballSimulator.Core.Enums.Teams;
 using BasketballSimulator.Core.Models.Team;
 
-namespace BasketballSimulator.Core.Data.Team;
+namespace BasketballSimulator.Core.Data.Teams;
 
 /// <summary>
 /// Provides access to the complete list of NBA teams.

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BasketballSimulator.Core.Data.Team;
-using BasketballSimulator.Logic.Generators.Team;
+using BasketballSimulator.Core.Data.Teams;
+using BasketballSimulator.Logic.Generators.Teams;
 
 namespace BasketballSimulator.Logic.Generators.League;
 

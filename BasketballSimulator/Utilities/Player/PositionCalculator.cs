@@ -1,23 +1,10 @@
-﻿using BasketballSimulator.Core.Enums.Player;
-using BasketballSimulator.Core.Models.Player;
+﻿using BasketballSimulator.Core.Enums.Players;
+using BasketballSimulator.Core.Models.Players;
 
-namespace BasketballSimulator.Core.Utilities.Player;
+namespace BasketballSimulator.Core.Utilities.Players;
 
 public static class PositionCalculator
 {
-    // Reference values for each position
-    private static readonly Dictionary<Position, double> PosValues = new()
-    {
-        [Position.PointGuard] = 0.0,  // PG
-        [Position.ShootingGuard] = 1.0,  // SG
-        [Position.SmallForward] = 2.0,  // SF
-        [Position.PowerForward] = 3.0,  // PF
-        [Position.Center] = 4.0,  // C
-        [Position.Guard] = 0.5,  // G  (PG/SG hybrid)
-        [Position.GuardForward] = 1.5,  // GF (SG/SF hybrid)
-        [Position.ForwardCenter] = 3.5   // FC (PF/C hybrid)
-    };
-
     /// <summary>
     /// Computes the best‐fit <see cref="Position"/> for a player.
     /// </summary>
@@ -29,39 +16,92 @@ public static class PositionCalculator
     /// </returns>
     public static Position ComputePosition(int heightRating, RatingPresets r)
     {
-        // Regression formula
-        double value =
-              -0.922949
-            + 0.073339 * heightRating
-            + 0.009744 * r.Strength
-            - 0.002215 * r.Speed
-            - 0.005438 * r.Jumping
-            + 0.003006 * r.Endurance
-            - 0.003516 * r.Inside
-            - 0.008239 * r.DunksLayups
-            + 0.001647 * r.FreeThrows
-            - 0.001404 * r.MidRange
-            - 0.004599 * r.ThreePointers
-            + 0.001407 * r.DefensiveIQ
-            + 0.002433 * r.OffensiveIQ
-            - 0.000753 * r.Dribbling
-            - 0.021888 * r.Passing
-            + 0.016867 * r.Rebounding;
+        // Point Guard (PG)
+        double pgScore =
+            0.18 * r.BallHandle +
+            0.16 * r.PassAccuracy +
+            0.12 * r.PassIQ +
+            0.12 * r.Speed +
+            0.10 * r.Agility +
+            0.08 * r.ThreePointShot +
+            0.08 * r.ShotIQ +
+            0.06 * r.PerimeterDefense +
+            0.05 * r.FreeThrow +
+            0.05 * r.Intangibles;
 
-        // Find the position with the minimal absolute difference
-        Position bestPos = Position.None;
-        double bestDiff = double.MaxValue;
+        // Shooting Guard (SG)
+        double sgScore =
+            0.20 * r.ThreePointShot +
+            0.15 * r.MidRangeShot +
+            0.12 * r.Speed +
+            0.10 * r.BallHandle +
+            0.10 * r.ShotIQ +
+            0.08 * r.Layup +
+            0.08 * r.PerimeterDefense +
+            0.07 * r.OffensiveConsistency +
+            0.05 * r.Intangibles +
+            0.05 * r.FreeThrow;
 
-        foreach (var kv in PosValues)
+        // Small Forward (SF)
+        double sfScore =
+            0.15 * r.MidRangeShot +
+            0.13 * r.DrivingDunk +
+            0.12 * r.PerimeterDefense +
+            0.10 * r.Strength +
+            0.10 * r.Speed +
+            0.08 * r.Layup +
+            0.08 * r.Hustle +
+            0.07 * r.OffensiveRebound +
+            0.07 * r.ShotIQ +
+            0.05 * r.Intangibles +
+            0.05 * r.FreeThrow;
+
+        // Power Forward (PF)
+        double pfScore =
+            0.15 * r.Strength +
+            0.13 * r.PostControl +
+            0.12 * r.StandingDunk +
+            0.10 * r.Block +
+            0.10 * r.OffensiveRebound +
+            0.10 * r.DefensiveRebound +
+            0.08 * r.HelpDefenseIQ +
+            0.07 * r.Layup +
+            0.05 * r.Intangibles +
+            0.05 * r.MidRangeShot +
+            0.05 * r.FreeThrow;
+
+        // Center (C)
+        double cScore =
+            0.15 * heightRating +
+            0.13 * r.Strength +
+            0.12 * r.StandingDunk +
+            0.12 * r.Block +
+            0.10 * r.InteriorDefense +
+            0.10 * r.OffensiveRebound +
+            0.10 * r.DefensiveRebound +
+            0.08 * r.OverallDurability +
+            0.05 * r.Intangibles +
+            0.05 * r.Layup;
+
+        // Hybrid positions as averages
+        double gScore = (pgScore + sgScore) / 2.0;
+        double gfScore = (sgScore + sfScore) / 2.0;
+        double fScore = (sfScore + pfScore) / 2.0;
+        double fcScore = (pfScore + cScore) / 2.0;
+
+        var scores = new Dictionary<Position, double>
         {
-            double diff = Math.Abs(value - kv.Value);
-            if (diff < bestDiff)
-            {
-                bestDiff = diff;
-                bestPos = kv.Key;
-            }
-        }
+            [Position.PointGuard] = pgScore,
+            [Position.ShootingGuard] = sgScore,
+            [Position.SmallForward] = sfScore,
+            [Position.PowerForward] = pfScore,
+            [Position.Center] = cScore,
+            [Position.Guard] = gScore,
+            [Position.GuardForward] = gfScore,
+            [Position.Forward] = fScore,
+            [Position.ForwardCenter] = fcScore
+        };
 
-        return bestPos;
+        return scores.OrderByDescending(kv => kv.Value).First().Key;
     }
 }

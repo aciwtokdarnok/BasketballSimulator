@@ -1,4 +1,4 @@
-﻿namespace BasketballSimulator.Core.Enums.Player;
+﻿namespace BasketballSimulator.Core.Enums.Players;
 
 public enum ActionType
 {

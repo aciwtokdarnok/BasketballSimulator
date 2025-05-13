@@ -1,5 +1,5 @@
-using BasketballSimulator.Core.Interfaces.Player;
-using BasketballSimulator.Logic.Generators.Player;
+using BasketballSimulator.Core.Interfaces.Players;
+using BasketballSimulator.Logic.Generators.Players;
 using BasketballSimulator.UI;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;

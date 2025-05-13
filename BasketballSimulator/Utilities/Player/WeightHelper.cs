@@ -1,4 +1,4 @@
-﻿namespace BasketballSimulator.Core.Utilities.Player;
+﻿namespace BasketballSimulator.Core.Utilities.Players;
 
 /// <summary>
 /// Generates a realistic basketball player weight (in kilograms)
@@ -24,7 +24,7 @@ public static class WeightHelper
     /// <returns>
     ///   Weight in kilograms, rounded to the nearest whole number.
     /// </returns>
-    public static byte GenerateWeight(byte heightRating, byte strengthRating)
+    public static int GenerateWeight(byte heightRating, int strengthRating)
     {
         var rng = new Random();
         // add +/- up to 20 lb jitter
@@ -34,6 +34,6 @@ public static class WeightHelper
 
         // Convert to kilograms and round
         double weightKg = weightLb * LbToKg;
-        return (byte)Math.Round(weightKg);
+        return (int)Math.Round(weightKg);
     }
 }

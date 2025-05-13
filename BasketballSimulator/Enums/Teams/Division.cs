@@ -1,4 +1,4 @@
-﻿namespace BasketballSimulator.Core.Enums.Team;
+﻿namespace BasketballSimulator.Core.Enums.Teams;
 
 /// <summary>
 /// Represents the NBA division within a conference.

@@ -2,9 +2,9 @@
 @using System.Linq
 @using System.Reflection
 @using BasketballSimulator.Core.Enums
-@using BasketballSimulator.Core.Enums.Player
+@using BasketballSimulator.Core.Enums.Players
 @using BasketballSimulator.Core.Models
-@using BasketballSimulator.Core.Models.Player
+@using BasketballSimulator.Core.Models.Players
 @using BasketballSimulator.UI.Helpers
 @using Microsoft.AspNetCore.Components
 
@@ -39,21 +39,52 @@
                     <td>@GetDescription(entry.Position)</td>
                     <td>@entry.Overall</td>
                     <td>@entry.Potential</td>
-                    <td>@entry.HeightRating</td>
-                    <td>@entry.Strength</td>
-                    <td>@entry.Speed</td>
-                    <td>@entry.Jumping</td>
-                    <td>@entry.Endurance</td>
-                    <td>@entry.Inside</td>
-                    <td>@entry.DunksLayups</td>
-                    <td>@entry.FreeThrows</td>
-                    <td>@entry.MidRange</td>
-                    <td>@entry.ThreePointers</td>
-                    <td>@entry.OffensiveIQ</td>
-                    <td>@entry.DefensiveIQ</td>
-                    <td>@entry.Dribbling</td>
-                    <td>@entry.Passing</td>
-                    <td>@entry.Rebounding</td>
+                    <td>@entry.Height</td>
+                    <td>@entry.Weight</td>
+                    <td>@entry.Intangibles</td>
+                    <td>@entry.TotalAttributes</td>
+                    <!-- Athleticism -->
+                    <td>@entry.Athleticism.HeightRating</td>
+                    <td>@entry.Athleticism.Speed</td>
+                    <td>@entry.Athleticism.Agility</td>
+                    <td>@entry.Athleticism.Strength</td>
+                    <td>@entry.Athleticism.Vertical</td>
+                    <td>@entry.Athleticism.Stamina</td>
+                    <td>@entry.Athleticism.Hustle</td>
+                    <td>@entry.Athleticism.OverallDurability</td>
+                    <!-- OutsideScoring -->
+                    <td>@entry.OutsideScoring.CloseShot</td>
+                    <td>@entry.OutsideScoring.MidRangeShot</td>
+                    <td>@entry.OutsideScoring.ThreePointShot</td>
+                    <td>@entry.OutsideScoring.FreeThrow</td>
+                    <td>@entry.OutsideScoring.ShotIQ</td>
+                    <td>@entry.OutsideScoring.OffensiveConsistency</td>
+                    <!-- InsideScoring -->
+                    <td>@entry.InsideScoring.Layup</td>
+                    <td>@entry.InsideScoring.StandingDunk</td>
+                    <td>@entry.InsideScoring.DrivingDunk</td>
+                    <td>@entry.InsideScoring.PostHook</td>
+                    <td>@entry.InsideScoring.PostFade</td>
+                    <td>@entry.InsideScoring.PostControl</td>
+                    <td>@entry.InsideScoring.DrawFoul</td>
+                    <td>@entry.InsideScoring.Hands</td>
+                    <!-- Playmaking -->
+                    <td>@entry.Playmaking.PassAccuracy</td>
+                    <td>@entry.Playmaking.BallHandle</td>
+                    <td>@entry.Playmaking.SpeedWithBall</td>
+                    <td>@entry.Playmaking.PassIQ</td>
+                    <td>@entry.Playmaking.PassVision</td>
+                    <!-- Defense -->
+                    <td>@entry.Defense.InteriorDefense</td>
+                    <td>@entry.Defense.PerimeterDefense</td>
+                    <td>@entry.Defense.Steal</td>
+                    <td>@entry.Defense.Block</td>
+                    <td>@entry.Defense.HelpDefenseIQ</td>
+                    <td>@entry.Defense.PassPerception</td>
+                    <td>@entry.Defense.DefensiveConsistency</td>
+                    <!-- Rebounding -->
+                    <td>@entry.Rebounding.OffensiveRebound</td>
+                    <td>@entry.Rebounding.DefensiveRebound</td>
                 </tr>
             }
         }
@@ -77,21 +108,52 @@
         (nameof(PlayerRatingHistory.Position), "Pos"),
         (nameof(PlayerRatingHistory.Overall), "Ovr"),
         (nameof(PlayerRatingHistory.Potential), "Pot"),
-        (nameof(PlayerRatingHistory.HeightRating), "Hgt"),
-        (nameof(PlayerRatingHistory.Strength), "Str"),
-        (nameof(PlayerRatingHistory.Speed), "Spd"),
-        (nameof(PlayerRatingHistory.Jumping), "Jmp"),
-        (nameof(PlayerRatingHistory.Endurance), "End"),
-        (nameof(PlayerRatingHistory.Inside), "Ins"),
-        (nameof(PlayerRatingHistory.DunksLayups), "Dnk"),
-        (nameof(PlayerRatingHistory.FreeThrows), "FT"),
-        (nameof(PlayerRatingHistory.MidRange), "2Pt"),
-        (nameof(PlayerRatingHistory.ThreePointers), "3Pt"),
-        (nameof(PlayerRatingHistory.OffensiveIQ), "oIQ"),
-        (nameof(PlayerRatingHistory.DefensiveIQ), "dIQ"),
-        (nameof(PlayerRatingHistory.Dribbling), "Drb"),
-        (nameof(PlayerRatingHistory.Passing), "Pss"),
-        (nameof(PlayerRatingHistory.Rebounding), "Reb")
+        (nameof(PlayerRatingHistory.Height), "Hgt"),
+        (nameof(PlayerRatingHistory.Weight), "Wgt"),
+        (nameof(PlayerRatingHistory.Intangibles), "Intangibles"),
+        (nameof(PlayerRatingHistory.TotalAttributes), "TotalAttr"),
+        // Athleticism
+        ("Athleticism.HeightRating", "Athl:Height"),
+        ("Athleticism.Speed", "Athl:Speed"),
+        ("Athleticism.Agility", "Athl:Agility"),
+        ("Athleticism.Strength", "Athl:Strength"),
+        ("Athleticism.Vertical", "Athl:Vertical"),
+        ("Athleticism.Stamina", "Athl:Stamina"),
+        ("Athleticism.Hustle", "Athl:Hustle"),
+        ("Athleticism.OverallDurability", "Athl:Durability"),
+        // OutsideScoring
+        ("OutsideScoring.CloseShot", "Out:Close"),
+        ("OutsideScoring.MidRangeShot", "Out:Mid"),
+        ("OutsideScoring.ThreePointShot", "Out:3Pt"),
+        ("OutsideScoring.FreeThrow", "Out:FT"),
+        ("OutsideScoring.ShotIQ", "Out:ShotIQ"),
+        ("OutsideScoring.OffensiveConsistency", "Out:Cons"),
+        // InsideScoring
+        ("InsideScoring.Layup", "In:Layup"),
+        ("InsideScoring.StandingDunk", "In:StDunk"),
+        ("InsideScoring.DrivingDunk", "In:DrDunk"),
+        ("InsideScoring.PostHook", "In:Hook"),
+        ("InsideScoring.PostFade", "In:Fade"),
+        ("InsideScoring.PostControl", "In:PostCtrl"),
+        ("InsideScoring.DrawFoul", "In:DrawFoul"),
+        ("InsideScoring.Hands", "In:Hands"),
+        // Playmaking
+        ("Playmaking.PassAccuracy", "Play:PassAcc"),
+        ("Playmaking.BallHandle", "Play:BallH"),
+        ("Playmaking.SpeedWithBall", "Play:SpdBall"),
+        ("Playmaking.PassIQ", "Play:PassIQ"),
+        ("Playmaking.PassVision", "Play:Vision"),
+        // Defense
+        ("Defense.InteriorDefense", "Def:Int"),
+        ("Defense.PerimeterDefense", "Def:Per"),
+        ("Defense.Steal", "Def:Steal"),
+        ("Defense.Block", "Def:Blk"),
+        ("Defense.HelpDefenseIQ", "Def:HelpIQ"),
+        ("Defense.PassPerception", "Def:PassPerc"),
+        ("Defense.DefensiveConsistency", "Def:Cons"),
+        // Rebounding
+        ("Rebounding.OffensiveRebound", "Reb:Off"),
+        ("Rebounding.DefensiveRebound", "Reb:Def")
     };
 
     // Returns sorted history based on current sort settings

@@ -1,8 +1,8 @@
-﻿using BasketballSimulator.Core.Enums.Player;
-using BasketballSimulator.Logic.Generators.Player;
-using System.Security.AccessControl;
+﻿using BasketballSimulator.Core.Enums.Players;
+using BasketballSimulator.Core.Models.Players;
+using BasketballSimulator.Logic.Generators.Players;
 
-namespace BasketballSimulator.Logic.Generators.Team;
+namespace BasketballSimulator.Logic.Generators.Teams;
 
 /// <summary>
 /// Generates a team roster of 12–15 players aged 19–38 years old,
@@ -34,17 +34,17 @@ public class TeamRosterGenerator
     /// then developed up to a randomized final age between 19 and 38.
     /// </summary>
     /// <param name="teamAbbrev">Team abbreviation for snapshots.</param>
-    public IReadOnlyList<Core.Models.Player.Player> GenerateRoster(string teamAbbrev)
+    public IReadOnlyList<Player> GenerateRoster(string teamAbbrev)
     {
         int totalSize = _rng.Next(12, 16);    // 12..15 players
         int guards = _rng.Next(5, 7);      // 5..6 guards
         int wings = _rng.Next(4, 6);      // 4..5 wings
         int bigs = totalSize - guards - wings;
 
-        var roster = new List<Core.Models.Player.Player>(totalSize);
+        var roster = new List<Player>(totalSize);
 
         // Helper to generate and develop one player
-        Core.Models.Player.Player CreatePlayer(Archetype arch)
+        Player CreatePlayer(Archetype arch)
         {
             // Target final age between 19 and 38
             byte finalAge = (byte)_rng.Next(19, 39);
